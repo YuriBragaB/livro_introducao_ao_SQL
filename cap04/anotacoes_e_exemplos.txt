@@ -5,7 +5,7 @@ capítulo 4:
 SQL = strutured query language(linguagem de pesquisa estruturada)
 SQL editor é onde você escreverá as instruções
 painel query selector exibirá os resultados das instruções
-comandos em sql são escritos e letra maiúscula(SELECT, FROM, WHERE, UPDATE, DELECT)
+comandos em sql são escritos em letra maiúscula(SELECT, FROM, WHERE, UPDATE, DELECT), não por obrigação, mas por boa prática
 F9 executa o código mais rápido do que clicando no play(SQLite)
 
 SELECT permite selecionar que colunas serão acessadas em uma tabela

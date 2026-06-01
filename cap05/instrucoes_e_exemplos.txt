@@ -1,2 +1,104 @@
 capítulo 5:
     WHERE
+
+intrução WHERE é utilizado para filtragem de registros de acordo com critérios
+geralmente as expressões e functions podem ser usadas em qualquer parte de uma instrução SQL
+ex:
+    SELECT * FROM station_data
+    WHERE year = 2010;
+
+pega os dados da linhas que tiverem a coluna year = 2010
+WHERE possui o != (diferente de), também pode ser utilizado <> que é a mesma coisa do !=
+ex:
+    SELECT * FROM station_data
+    WHERE year != 2010;
+
+pega os dados das linhas que tiverem a coluna year diferente de 2010
+
+ex:
+    SELECT * FROM station_data
+    WHERE year BETWEEN 2005 and 2010;
+
+BETWEEN = entre
+pega os dados das linhas que tiverem a coluna year entre 2005 e 2010
+
+AND(e), as duas condições tem que ser verdadeiras
+AND(e) pode expressar um BETWEEN, com o auxílio de >= e <= 
+ex:
+    SELECT * FROM station_data
+    WHERE year >= 2005 AND year <= 2010;
+
+OR(ou), pelo menos uma das condições tem que ser verdadeira
+ex:
+    SELECT * FROM station_data
+    WHERE MONTH = 3
+    OR MONTH = 6
+    OR MONTH = 9
+    OR MONTH = 12
+
+IN(contém), pega os dados qyue contém o que foi passado dentro do operadores IN
+ex:
+    SELECT * FROM station_data
+    WHERE MONTH IN (3, 6, 9, 12);
+
+se quiser excluir é possível utilizar o operador NOT + IN
+ex:
+    SELECT * FROM station_data
+    WHERE MONTH NOT IN (3, 6, 9, 12);
+
+é possível colocar operações matemáticas no WHERE
+
+é possível usar instruções = AND, OR, IN com texto. No entanto, ao usar texto, é preciso inserir os literais em aspas simples
+literais = Literais na programação são valores fixos representados diretamente no código-fonte que não mudam durante a execução
+ex:
+    SELECT * FROM station_data
+    WHERE report_code = '513A63';
+
+possui a função length() igual o JS
+ex:
+    SELECT * FROM station_data
+    WhERE length(report_code) != 6;
+
+possui a operação LIKE, onde % significa qualquer coisa
+ex:
+    SELECT * FROM station_data
+    WHERE report_code LIKE 'A%'
+
+procure A seguido de qualquer coisa, pode possuir dois operador de porcentagem, %a% = procure a independente de qualquer coisa 
+para pegar duas letras seguídas, é necessário passar um _ na str('B_C%', procura BC independo que vem ápos)
+
+é possível utilizar valores de true or false no SQL
+no universo dos banco de dados 0 = false, 1 = true
+alguns bancos de dados permitem o uso de true or false, porém n é o caso do SQLite
+NOT expressa false
+ex:
+    SELECT * FROM station_data
+    WHERE tornado = 0 AND hail = 1
+
+pega os registros semn tornado e com granizo
+
+é possível manipular o NULL, que se trata de um estado de vacuidade, um vazio, a ausência completa de qualquer conteúdo
+valores NULL não podem ser determinados com =, é necessário utilizar IS NULL ou IS NOT NULL, is(é)
+ex:
+    SELECT * FROM station_data
+    WHERE snow_depth IS NULL;
+
+não confunda texto vazio('') e o número 0 com NULL
+function coalesce(coluna, valor que quer transformar o NULL)
+ex:
+    SELECT * FROM station_data
+    WHERE coalesce(preciptation, 0) <= 0.5;
+
+como qualquer função a coalesce() também pode ser usada na instrução SELECT e não apenas no WHERE
+
+é possível encadear instruções
+ex:
+    SELECT * FROM station_data
+    WHERE (rain = 1 AND temperature <= 32)
+    OR snow_depth > 0
+
+é melhor botar entre parênteses, facilita a compreesão do código, os parênteses são utilizados que nem no python
+
+considerações finais:
+    - este capítulo ensionou a filtrar os registros de uma instrução SELECT eficientemente usando uma cláusula WHERE
+    - foi visto como encadear de maneira cuidadosa e segura várias condições na mesma intrução WHERE
