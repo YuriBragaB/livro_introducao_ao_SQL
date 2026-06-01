@@ -1,0 +1,55 @@
+capítulo 4:
+    SELECT
+
+
+SQL = strutured query language(linguagem de pesquisa estruturada)
+SQL editor é onde você escreverá as instruções
+painel query selector exibirá os resultados das instruções
+comandos em sql são escritos e letra maiúscula(SELECT, FROM, WHERE, UPDATE, DELECT)
+F9 executa o código mais rápido do que clicando no play(SQLite)
+
+SELECT permite selecionar que colunas serão acessadas em uma tabela
+ex: SELECT * FROM COSTUMER;
+pode ser entendido comp: selecione todas as colunas da tabela CUSTUMER
+* = um placeholder que especifica todas as colunas
+SELECT pode acessar colunas específicas, caso seja colocano o nome da coluna entre o SELECT e o FROM
+
+a instrução SELECT pode fazer muito mais que apenas selecionar colunas. Você também pode efetuar cálculos em uma ou mais colunas e incluí-los no resultado de uma consulta
+ex:
+    SELECT
+    PRODUCT_ID,
+    DESCRIPTION,
+    PRICE,
+    PRICE * 1.07 AS TAXED_PRICE
+    FROM PRODUCT;
+
+esse código criou uma nova coluna de forma dinâmica a partir da tabela preço com o nome TAXED_PRICE
+forma dinâmica não altera a tabela em si, é tipo um retorno das functions, só aparece caso o trecho de código seja executada
+é possível deixar espaçado o código, assim facilitando a leitura do código
+instrução AS(alias) é utilizada para dar nomes a expressões, além de poder ser utilizado para aplicar um novo nome a tabela existente
+ex:
+    SELECT
+    PRODUCT_ID,
+    DESCRIPTION,
+    PRICE AS UNTAXED_PRICE,
+    PRICE * 1.07 AS TAXED_PRICE
+    FROM PRODUCT;
+
+esse bloco renomeia a coluna PRICE para UNTAXED_PRICE
+_ = um placeholder de espaçamento
+é um espaço reservado ou um texto temporário usado para indicar, instruir ou exemplificar o tipo de informação
+
+SQLite possui a function round(), igual ao do python, 1 parâmetro é o valor, segubndo é a quantidade de casas decimais
+ex:
+round(PRICE * 1.07, 2) AS TAXED_PRICE;
+
+o SQL possui um caractere especial para concatenação:
+pipe duplo(||)
+ex:
+    SELECT NAME,
+    CITY || ', '|| STATE AS LOCATION
+    FROM CUSTOMER;
+
+considerações finais:
+    - Neste capítulo foi visto como usar a instrução SELECT, a operação SQL mais comum. Ela recupera e transforma od dados de uma tabela sem afetar a tabela propriamente dita
+    - Dentro de expressões pode ser utilizado operadores e functions para executar tarefas como as de arredondamento(round(o que quer arredondar, casa decimais)), cálculo matemático(+, -, *, /, %) e concatenação(||, pipe duplo)
