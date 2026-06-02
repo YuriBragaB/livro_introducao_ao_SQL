@@ -1,0 +1,116 @@
+capítulo 6:
+    GROUP BY e ORDER BY
+
+a agregação de dados(também chamada de totalização, resumo ou agrupamento de dados) é a criação de algum tipo total a partir de váriosa registros
+soma, mínimo, máximo, contagem e média são operações de agregação comuns
+em SQL é possível agrupar esses totais em qualquer coluna especificada, o que permite controlar facilmente o escopo das agregações
+
+é possível contar a quantidade de registros, COUNT(*), além de ser possível colocar WHERE( como quase todos os comandos SQL):
+ex:
+    SELECT COUNT(*) AS record_count FROM station_data
+    WHERE tornado = 1;
+
+COUNT(*) siginifica contar registros
+
+é possível especificar contagem de valores n nulos em uma coluna, ao passar como parâmetro a coluna
+
+GROUP BY:
+faz um agrupamento de acorodo com algo
+ex:
+    SELECT year, COUNT(*) AS record_count FROM station_data
+    WHERE tornado = 1
+    GROUP BY year;
+
+agrupa os ocorrências de tornados em cada ano, mostrando a contagem de tornados no ano
+é possível adicionar mais coisas no GRUOP BY e no SELECT
+ex:
+    SELECT year, month, COUNT(*) AS record_count FROM station_data
+    WHERE tornado = 1
+    GROUP BY year, month;
+
+faz uma contagem do ano com o mês
+
+é possível realizar um GROUP BY a partir da posição ordinal(as posições ordinais correspondem à posição numérica de cada item na intrução SELECT)
+é útil quando se tem nomes grandes
+é a mesma coisa do bloco de código anterior, porém é mais prático
+ex:
+    SELECT year, month, COUNT(*) AS record_count FROM station_data
+    WHERE tornado = 1
+    GROUP BY 1, 2;
+
+a posição 1 é o ano e a posição 2 é o mês
+
+ORDER BY:
+é inserido no fim de uma instrução SQL(após as instruções WHERE e GROUP BY)
+    ex:
+    SELECT year, month, COUNT(*) AS record_count FROM station_data
+    WHERE tornado = 1
+    GROUP BY year, month
+    ORDER BY year, month;
+
+ordenada de acordo com o ano e o mês, o ordenamento padrão é crescente
+
+DESC muda a ordem para decrescente, DESC é individual
+ex:
+    SELECT year, month, COUNT(*) AS record_count FROM station_data
+    WHERE tornado = 1
+    GROUP BY year, month
+    ORDER BY year DESC, month;
+
+nesse caso ordenada de forma decrescente o ano, o mês continua crescente, para deixar as duas estruturas DESC é necessário adicionar DESC após o campo month
+
+AVG(coluna) = calcula a média 
+
+ex:
+    SELECT month, AVG(temperature) as avg_temp
+    FROM station_data
+    WHERE year >= 2000
+    GROUP BY month
+
+é possível usar a função de arredondamento round no AVG
+
+SUM(coluna) = calcula a soma dos valores de profundidade da coluna
+ex:
+    SELECT year, SUM(snow_depth) as total_snow
+    FROM station_data
+    WHERE year >= 2000
+    GROUP BY year
+
+calcula a soma de neve de cada ano a partir do ano 2000
+
+nao há limites de operações de agregação que pode ser utilizado em uma única consulta
+ex: 
+    SELECT year, 
+    SUM(snow_depth) as total_snow,
+    SUM(precipitation) as total_precipitation,
+    MAX(precipitation) as max_preciptation
+    FROM station_data
+    GROUP BY year
+
+calcula total_snow e total_precipitation para cada ano desde o ano 2000 na mesma consulta, além de obter max_preciptation
+
+HAVING:
+é utilizado para filtrar registros de acorod com um valor agregado
+é tipo um WHERE para instruções agragadas
+a palavra WHERE filtra registros individuais, mas HAVING filtra agregações
+ex:
+    SELECT year,
+    SUM(precipitation) as total_preciptation
+    FROM station_data 
+    GROUP BY year
+    HAVING total_preciptation > 30
+
+filtra o agrupamento total_precipitation quandoa precipitação é maior do que 30
+
+DISTINCT:
+obtém os valores que n se repetem em uma tabela, é utilizada com SELECT 
+ex:
+    SELECT DISTINCT station_number, year FROM station_data
+
+obtém uma lista de valores distintos da coluna station_number
+
+
+considerações finais:
+    - neste capítulo foi ensinado como agregar e classificar dados usando GROUP BY e ORDER BY
+    - funções de agregação
+    - filtras dados agrupado(HAVING), n se pode utilizar WHERE

@@ -97,7 +97,7 @@ ex:
     WHERE (rain = 1 AND temperature <= 32)
     OR snow_depth > 0
 
-é melhor botar entre parênteses, facilita a compreesão do código, os parênteses são utilizados que nem no python
+é melhor botar entre parênteses, facilita a compreesão do código, os parênteses são utilizados que nem no python, facilitam a compreensão da máquina
 
 considerações finais:
     - este capítulo ensionou a filtrar os registros de uma instrução SELECT eficientemente usando uma cláusula WHERE
