@@ -1,0 +1,96 @@
+capítulo 7:
+    instruções CASE
+
+CASE:
+é um operador que permite substituir o valor de uma coluna por outro valo9r, de acordo com uma ou mais condições
+parece com o case do python, porém finaliza com _ 
+inicia com CASE, finaliza com END, WHEN[condição], THEN[valor], em que a condição e o valor correspondente nós é que fornecemos e ELSE que é definido caso nenhuma das condições seja alcançada
+ex:
+    SELECT report_code, year, day, wind_speed,
+    CASE
+        WHEN wind_speed >= 40 THEN 'HIGH'
+        WHEN wind_speed >= 30 and wind_speed < 40 THEN 'MORERATE'
+        ELSE 'LOW'
+    END as wind_severity
+    FROM station_data
+
+utiliza CASE para classificar a velocidade do vento
+a maquina lê de cima para baixo, então essa parte pode ser retirada (and wind_speed < 40 THEN 'MORERATE'), pois a condiçaõ de cima já pegou os valores maiores que 40
+
+agrupando e fazendo a contagem com CASE
+ex:
+    SELECT report_code, year, day, wind_speed,
+    CASE
+        WHEN wind_speed >= 40 THEN 'HIGH'
+        WHEN wind_speed >= 30 and wind_speed < 40 THEN 'MORERATE'
+        ELSE 'LOW'
+    END as wind_severity,
+    COUNT (*) as record_count
+    FROM station_data
+    GROUP BY wind_severity
+
+conta as ocorrências de cada THEN[valor]
+truque CASE 'zero/null':
+permite aplicar diferentes 'filtros' a valores agregados distintos na mesma consulta SELECT
+é possível fazer com WHERE aplicando duas consultas separadas, é impossível fazer isso com uma consultas pois ele aplica um filtro a todos os itens, porém é possível fazer isso com CASE
+com WHERE:
+ex:
+    SELECT year, month,
+    SUM(precipitation) as tornado_precipitation
+    FROM station_data
+    WHERE tornado = 1
+    GROUP BY year, month
+
+bloco 1, pega quando ocorre tornado, 1 = True
+
+    SELECT year, month,
+    SUM(precipitation) as non_tornado_precipitation
+    FROM station_data
+    WHERE tornado = 0
+    GROUP BY year, month
+
+bloco 2, pega quando n ocorre tornado
+
+    SELECT year, month,
+    SUM(CASE WHEN tornado = 1 THEN precipitation ELSE 0 END) 
+    AS tornado_precipitation,
+    SUM(CASE WHEN tornado = 0 THEN precipitation ELSE 0 END)
+    AS non_tornado_precipitation
+    FROM station_data
+    GROUP BY year, month
+
+bloco 3, utiliza CASE, fazendo o mesmo que dois blocos WHERE
+é possível utilizar funções de agregação em conjunto com o CASE, no exemplo anterior foii utilizado SUM(), porém poderia ser utilizado MIN(), MAX(), AVG(), etc..
+ex:
+    SELECT year, month,
+    MAX(CASE WHEN tornado = 1 THEN precipitation ELSE NULL END) 
+    AS max_tornado_precipitation,
+    MAX(CASE WHEN tornado = 0 THEN precipitation ELSE NULL END)
+    AS max_tornado_precipitation
+    FROM station_data
+    GROUP BY year
+
+exemplo com a função MAX()
+utiliza NULL no lugar do 0 para desconsiderar o valores que n vão ser utilizados
+
+é possível utilizar expressôes booleanas(AND, OR, NOT) no CASE
+ex:
+    SELECT month, 
+
+    AVG(CASE WHEN rain OR hail THEN temperature ELSE null END)
+    AS avg_preciptation_temp,
+
+    AVG(CASE WHEN NOT (rain OR hail) THEN temperature ELSE null END)
+
+    FROM station_data
+    WHERE year > 2000
+    GROUP BY month;
+
+esse exemplo calcula as temperaturas médias por mês quando chuva/granizo etavam ou não presentes após o ano 2000
+só é possível utilizar um where no código, caso queria fazer mais filtros é necessário utilizar CASE(CASE, WHEN, THEN, ELSE, END)
+o truque da instrução CASE zero/null é bem útil(0 = quanod você quer utilizar, null = você não vai utilizar)
+
+considerações finais:
+    - CASE oferece muita flexibilidade
+    - é possível substituir valores de uma coluna por outro conjunto de valores de acordo com as condições
+    - bloco CASE cria mais oportunidades de fatiar dados e colocar mais informações na mesma consulta
