@@ -1,0 +1,77 @@
+capítulo 8:
+    JOIN
+
+JOIN = juntar
+a associação é a funcionalidade definidora do SQl que distingue de outras tecnologias de dados
+relacionamento é quando uma tabela pega informações de outra tabela
+possui uma relacão que é dada como pai e filho, o dado que é fornecido a outra tabela é o pai, pois n depende da outra para existir, já o dado filho depende do dado fornecido da do pai para existir
+posusi relacionamentos, um deles é o de um para muitos, é considerado uma relação um para muitos quando um dado pai é utilizado entre dados filhos
+possui 3 tipos de relacionamento: um para muitos, muitos para um e muitos para muitos
+o tipo de relacionamento mais cokmum é o um para muitos, pois acomoda a maioria das necessidades empresariais, um banco de dados bem projetado contuma se enquadrar em uma relação 1 para muitos
+
+JOIN:
+os operadores JOIN consegue colocar as informações de duas tabelas lado a lado
+INNER JOIN = permite mesclar duas tabelas, porém é necessário encontrar pontos em comum entre elas
+o ID é ideal para ser esse ponto em comum 
+
+INNER JOIN:
+INNER = interna
+ex:
+    SELECT ORDER_ID,
+    CUSTOMER.CUSTOMER_ID,
+    ORDER_DATE,
+    SHIP_DATE,
+    NAME,
+    STREET_ADDRESS,
+    CITY,
+    STATE,
+    ZIP,
+    PRODUCT_ID,
+    ORDER_QTY
+
+    FROM CUSTOMER INNER JOIN CUSTOMER_ORDER
+    ON CUSTOMER.CUSTOMER_ID = CUSTUMER_ORDER.CUSTUMER_ID
+
+é feito uma mesclagem temporária entre duas tabelas, tornado-as uma
+primeiro é selecionado os campos nas tabelas CUSTOMER e CUSTOMER_ORDER
+INNER JOIN é colocado na instrução FROM, é necessário falar de onde vem a tabela, dps o nome da tabela que ira juntar, como foi visto na primeira linha do bloco 2
+na segunda linha é onde especifica qual é o atributo comum entre os dois campos é necessário colocar o nome da tabela seguido de um . e dps o elemento em comum, além de atribuir uma igualdade entre elas, tudo isso seguido de um comando ON
+permeite acessar duas tabelas
+as associações forneme o melhor de dois mundos, pois armazena dados eficientemente por intermédio da normalização , além de criar uma vizualização mais descritiva
+com o uso de INNER JOIN a qualquer registro que não tenha um valor comum nas duas tabelas será excluido, para incluir todos se utiliza LEFT JOIN
+
+LEFT JOIN:
+LEFT = esquerda
+é utilizado para incluir o que INNER JOIN exclui
+é bem parecido com o INNER, porém há uma diferença sutil, nela a tabela especificada do lado esquerdo terá todos os seus dados incluidos, msm se não tiverem registros-filhosem 
+em vez de omitir como o INNER os campos viram nulos
+ex:
+    SELECT CUSTOMER.CUSTOMER_ID,
+    CUSTOMER.CUSTOMER_ID,
+    ORDER_DATE,
+    SHIP_DATE,
+    NAME,
+    STREET_ADDRESS,
+    CITY,
+    STATE,
+    ZIP,
+    PRODUCT_ID,
+    ORDER_QTY
+
+    FROM CUSTOMER LEFT JOIN CUSTOMER_ORDER
+    ON CUSTOMER.CUSTOMER_ID = CUSTOMER_ORDER.CUSTOMER_ID
+
+LEFT JOIN é utilizado para encontrar registros orfãos, que não possuem pais, é possívelpegar só os nulos por meio de um WHERE
+ex:
+SELECT 
+    CUSTOMER.CUSTOMER_ID,
+    NAME AS CUSTOMER_NAME
+
+    FROM CUSTOMER LEFT JOIN CUSTOMER_ORDER
+    ON CUSTOMER.CUSTOMER_ID = CUSTOMER_ORDER.CUSTOMER_ID
+
+    WHERE ORDER_ID IS NULL
+
+pega os valores que n possuem pedidos
+
+além do INNER JOIN e o LEFT JOIN, existe o RIGHT JOIN(faz a associação de acordo com a tabela da direita) e o OUTER JOIN(faz a associação com as duas tabelas), porém esse dois outros JOIN são pouco utilizados
