@@ -75,3 +75,98 @@ SELECT
 pega os valores que n possuem pedidos
 
 além do INNER JOIN e o LEFT JOIN, existe o RIGHT JOIN(faz a associação de acordo com a tabela da direita) e o OUTER JOIN(faz a associação com as duas tabelas), porém esse dois outros JOIN são pouco utilizados
+
+associação de tabelas:
+os bancos de dados relacionais podem ser muito complexos em termos de relacionamento entre tabelas, pois uma tabela específica pode ser filha de mais de uma tabela-pai, e uma tabela pode ser pai de uma tabela e filha de outra
+ex:
+    SELECT
+    ORDER_ID,
+    CUSTOMER.CUSTOMER_ID,
+    NAME AS CUSTOMER_NAME,
+    STREET_ADDRESS,
+    CITY,
+    STATE,
+    ZIP,
+    ORDER_DATE,
+    PRODUCT.PRODUCT_ID,
+    DESCRIPTION,
+    ORDER_QTY
+
+    FROM CUSTOMER
+
+    INNER JOIN CUSTOMER_ORDER
+    ON CUSTOMER_ORDER.CUSTOMER_ID = CUSTOMER.CUSTOMER_ID
+
+    INNER JOIN PRODUCT
+    ON CUSTOMER_ORDER.PRODUCT_ID = PRODUCT.PRODUCT_ID
+
+faz uma associação dupla, agrupando 3 tabelas, com a que tem ambas em comum sendo CUSTOMER_ORDER
+a tabela se torna bem mais descritiva com esse agrupamento
+
+ex:
+    SELECT
+    ORDER_ID,
+    CUSTOMER.CUSTOMER_ID,
+    NAME AS CUSTOMER_NAME,
+    STREET_ADDRESS,
+    CITY,
+    STATE,
+    ZIP,
+    ORDER_DATE,
+    PRODUCT.PRODUCT_ID,
+    DESCRIPTION,
+    ORDER_QTY,
+    ORDER_QTY * PRICE as REVENUE
+
+    FROM CUSTOMER
+
+    INNER JOIN CUSTOMER_ORDER
+    ON CUSTOMER_ORDER.CUSTOMER_ID = CUSTOMER.CUSTOMER_ID
+
+    INNER JOIN PRODUCT
+    ON CUSTOMER_ORDER.PRODUCT_ID = PRODUCT.PRODUCT_ID
+
+é possível manipular campos de tabelas distintas, como foi feito para criar a coluna REVENUE
+
+agrupando JOINs:
+é possível utilizar GROUP BY com JOIN
+ex:
+    SELECT
+    CUSTOMER.CUSTOMER_ID,
+    NAME AS CUSTOMER_NAME,
+    sum(ORDER_QTY * PRICE) as TOTAL_REVENUE
+
+    FROM CUSTOMER_ORDER
+
+    INNER JOIN CUSTOMER
+    ON CUSTOMER.CUSTOMER_ID = CUSTOMER_ORDER.CUSTOMER_ID
+
+    INNER JOIN PRODUCT
+    ON CUSTOMER_ORDER.PRODUCT_ID = PRODUCT.PRODUCT_ID
+
+    GROUP BY 1,2
+
+faz o agrupamento pegando quem fez compras
+
+ex:
+    SELECT
+    CUSTOMER.CUSTOMER_ID,
+    NAME AS CUSTOMER_NAME,
+    sum(ORDER_QTY * PRICE) as TOTAL_REVENUE
+
+    FROM CUSTOMER
+
+    LEFT JOIN CUSTOMER_ORDER
+    ON CUSTOMER.CUSTOMER_ID = CUSTOMER_ORDER.CUSTOMER_ID
+
+    LEFT JOIN PRODUCT
+    ON CUSTOMER_ORDER.PRODUCT_ID = PRODUCT.PRODUCT_ID
+
+    GROUP BY 1,2
+
+faz o agrupamento pegando tudo, até os NULL
+coalesce(sum(ORDER_QTY * PRICE), 0) as TOTAL_REVENUE, se fizer isso modifica os NULL por 0
+
+considerações finais:
+    as associações são o tópico mais desafiador do SQL, mas o mais compensador, uma vez que elas nos permite pegar dados distribuídos em várias tabelas e reuni-los como algo mais siginificativo e descritivo
+    é possível pegar duas ou mais tabelas e associá-las em uma tabela maior com mais contexto
