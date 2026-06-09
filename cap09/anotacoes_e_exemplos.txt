@@ -1,0 +1,49 @@
+capítulo 9:
+    design de banco de dados
+
+intrução SELECT é apenas para leitura
+quando você criar suas próprias tabelas para dar suporte à empresa, isso não pode ser feito de qualquer maneira, é preciso planejar com cuidado porque certamente um desing de banco de dados inapropriado causará arrependimentos mais à frente
+para orientar o design é necessário fazer perguntas críticas:
+    perguntas relativas ao desing:
+        - quais são os requisitos do negócio?
+        - que tabelas serão necessárias para atender a esses requisitos?
+        - que colunas cada tabela conterá
+        - como as tabelas serão normalizadas
+        - quais serão os relacionamentos pai/filho
+
+o fornecimento de dados também deve fazer parte do processo de planejamento, uma vez que se os dados não forem editáveis e atuais, o desing terá falhado
+    perguntas relacionadas aos dados:
+        - quantos dados serão fornecidos nessas tabelas?
+        - quem ou que fornecerá os dados para as tabelas?
+        - de onde virão os dados?
+        - precisamos de processos que preencham automaticamente as tabelas?
+    
+    se você precisa armazenar um alto volume de dados de atualização regular, será preciso que uma linguagem execute esse processo, assim melhorando a eficiência
+
+Um banco de dados centralizado é um sistema onde todos os dados são armazenados, gerenciados e mantidos em um único local físico, como um servidor central ou mainframe, é onde geralmente se lida com a segurança e administração
+banco de dados centralizados são gerenciados por administradores de bancos de dados
+    perguntas relacionadas a segurança:
+        - quem deve ter acesso a esse banco de dados
+        - quem deve ter acesso a que tabelas? acesso somente leitura? acesso gravação?
+        - esse banco de dados é crítico para as operações empresariais?
+        - que planos de backup temos para o caso de falha
+        - as alterações feitas nas tabelas devem ser registradas?
+        - se o banco de dados for usado por sites ou aplicativos web, isso é seguro?
+    
+    segurança é um assunto difícil de se resolver, pois uma segurança excessiva cria burocracia e atrapalha a agilidade, mas a segurança indeficiente é um convite ao caso
+    a conexão de qualquer coisa com a web a torna mais vulnerável a vazamentos e ataques maliciosos
+
+para projetar um banco de dados é necessário pensar em cada componente de forma separada, criando uma tabela para cada assunto, qualquer problema complexo pode ser dividido em componentes mais simples(dividir para conquistar)
+
+você deve sempre tentar ter uma chave primária em suas tabelas
+a chave primária é um campo especial(ou uma combinação de campos) que fornece uma identidade exclusiva para cada registro
+a chave primária costuma ser a base de associações e definir relacionamentos
+não confunda a chave externa com a chave primária:
+    - chave primária fica na tabela-pai
+    - chave externa fica na tabela-filha
+a chave primária e a chave externa não precisam compartilhar o mesmo nome de campo
+um esquema é um diagrama que exibe as tabelas, suas colunas e seus relacionamentos
+todas as chaves primárias e externas são conectadas por setas
+o lados em ponta sai de uma chave primária e o outro aponta para a chave externa
+as setas demonstram como cada tabela-pai fornece dados para as tabelas-filhas
+
