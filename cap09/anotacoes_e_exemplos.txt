@@ -42,8 +42,87 @@ não confunda a chave externa com a chave primária:
     - chave primária fica na tabela-pai
     - chave externa fica na tabela-filha
 a chave primária e a chave externa não precisam compartilhar o mesmo nome de campo
+
 um esquema é um diagrama que exibe as tabelas, suas colunas e seus relacionamentos
 todas as chaves primárias e externas são conectadas por setas
 o lados em ponta sai de uma chave primária e o outro aponta para a chave externa
 as setas demonstram como cada tabela-pai fornece dados para as tabelas-filhas
 
+quando for criar um banco de dados é uma boa prática botar .db(database)
+
+CREATE TABLE:
+    cria as tabelas por comando SQL, pode ser feito por interface gráfica
+    pela interface gráfica no SQLite é necessário colocar nome de coluna e tipo(lembra muito o supabase, porém possui menos tipos de dados)
+    tipos de dados padrões SQLite = INTEGER, NUMERIC, TEXT, REAL, BLOB
+    é possível digitar outros tipos de dados, por exemplo VARCHAR
+    FK(forager key) é a mesma coisa de chave externa
+    quando você acaba de criar a tabela(Save Table) pela interface gráfica o SQLiteStudio executa um comando CREATE TABLE
+    ex:
+        CREATE TABLE COMPANY (
+            COMPANY_ID                  INTEGER      PRIMARY KEY AUTOINCREMENT,
+            NAME                        VARCHAR (30) NOT NULL,
+            DESCRIPTION                 VARCHAR (60),
+            PRIMARY_CONTACT_ATTENDEE_ID INTEGER      NOT NULL
+        );
+
+    cada coluna é definida por um nome, seguido pelo tipo e por qualquer restrição ou regra existente como PRIMARY_KEY, AUTOINCREMENT ou NOT NULL, tudo isso dentro do comando CREATE TABLE + nome da tabela
+    interface gráfica leva o nome de guia Structure
+    é uma boa ideia utilizar valores booleanos para expressar 0 e 1(0 = false, 1 = true)
+    valor default escolhe um padrão, caso n seja colocado nada ele assumira o lugar  no NULL
+    é importante se lembrar que a chave externa de uma tabela-filha está associada à chave primária de uma tabela-pai
+    registro órfão n é quando a FK está vazia
+    para definir as chaves externas pela guia Stucture é simples
+    ex:
+            PRAGMA foreign_keys = 0;
+
+        CREATE TABLE sqlitestudio_temp_table AS SELECT *
+                                                FROM PRESENTATION;
+
+        DROP TABLE PRESENTATION;
+
+        CREATE TABLE PRESENTATION (
+            PRESENTATION_ID   INTEGER PRIMARY KEY AUTOINCREMENT,
+            BOOKED_COMPANY_ID INTEGER NOT NULL
+                                    REFERENCES COMPANY (COMPANY_ID),
+            BOOKED_ROOM_ID    INTEGER NOT NULL,
+            START_TIME        TIME,
+            END_TIME          TIME
+        );
+
+        INSERT INTO PRESENTATION (
+                                    PRESENTATION_ID,
+                                    BOOKED_COMPANY_ID,
+                                    BOOKED_ROOM_ID,
+                                    START_TIME,
+                                    END_TIME
+                                )
+                                SELECT PRESENTATION_ID,
+                                        BOOKED_COMPANY_ID,
+                                        BOOKED_ROOM_ID,
+                                        START_TIME,
+                                        END_TIME
+                                FROM sqlitestudio_temp_table;
+
+        DROP TABLE sqlitestudio_temp_table;
+
+        PRAGMA foreign_keys = 1;
+    
+    o código é bem complexo, porém o SQLiteStudio consegue gerar-lo tranquilamente
+    o uso de chaves externas dá integridade aos dados e impede que dados incorretos corrompam os relacionamentos.
+    devemos definir restrições de chave extera para todos os relacionamentos desse banco de dados a fim de que não haja nenhum registro órfão
+    a imposição de chave-externa pode ter de ser ativada antes, depende muito do banco de dados que você está utilizando, o SQLiteStudio o ativa por padrão
+
+criando views:
+    não é raro consultas SELECT muito utilizadas serem armazenadas em um banco de dados
+    quando salvamos a consulta em um banco de dados, ela se chama view(visualizações)
+    uma view se comporta de forma semelhante a uma tabela
+    os dados serão totalmente derivados da consulta SELECT que você especificou
+    é possível utilizar uma view como se fosse uma tabela(e aplicar filtros, executar operações de associação e fazer qualquer coisa que faríamos em uma intrução SELECT com uma tabela)
+    ex:
+        SELECT * FROM PRESENTATIO_VW
+        WHERE SEAT_CAPACITY >= 30
+
+considerações finais:
+    - foi aprofundada a criação de banco de dados e como projetá-los eficientemente
+    - foi estudado o relacionamento entre tabelas, que ajudam a definir claramente suas associações
+    - foi examinado algumas das diversas restrições para manter a consistência dos dados e assegurar que sigam as regras que foram definidas
