@@ -1,0 +1,64 @@
+capítulo 10:
+    gerenciando dados
+
+neste capítulo será ensinado como inserir, excluir e atualizar registros, é muito mai fácil escrever esses tipos de operação do que o SELECT
+as operações de gravação e leitura não precisam ser executadas por uma pessoa, as linguagens de programação fazem isso, de uma forma bem mais eficiente
+
+INSERT:
+    a instrução INSERT insere um registro nno banco de dados
+    ex:
+        INSERT INTO ATTENDEE(FIRST_NAME, LAST_NAME)
+        VALUES('Thomas', 'Nield')
+    primeiro declara em qual tabela vai inserir, seguido das coluna
+    depois colocar o valor, é necessário especificar na mesma ordem do INSERT INTO
+
+    insert são viáveis na hora de testar o desing do banco de dados, vendo se cada coluna está assumindo o comportamento adequado
+    é possível inserir mais de um elemento por vez
+    ex:
+        INSERT INTO ATTENDEE(FIRST_NAME, LAST_NAME)
+        VALUES
+        ('Thomas', 'Nield'),
+        ('yuri', 'barbosa'),
+        ('josé', 'neto')
+    executar várias inserções dessa maneira é muito mais eficiente, principalmente se você tiver milhares de registros
+    quando uma linguagem estiver preenchendo é melhor que esteja nessa sintaxe, pois é muito mais eficiente do que um INSERT por vez
+
+    é possível pegar dados para inserção direito do SELECT
+    ex:
+        INSERT INTO ATTENDE (FIRST_NAME, LAST_NAME, PHONE,  EMAIL)
+        SELECT FIRST_NAME, LAST_NAME, PHONE, EMAIL
+        FROM SOME_OTHER_TABLE
+    
+    dá para testar as FK pelo insert, verificando se ela nega os registros órfão
+
+DELETE:
+    é perigosa demais, pois se não for colocado um where a tabela será excluida inteira
+    ex:
+        DELETE FROM ATTENDE
+    
+    para utiliza-la de uma forma melhor é necessário colocar um WHERE, assim filtrando o que será apagado
+    ex:
+        DELETE FROM ATTENDEE
+        WHERE PHONE IS NULL
+        AND EMAIL IS NULL   
+    deleta da tabela attendee quando o phone for nulo e o email for nulo
+
+    uma boa prática é utilizar uma instrução SELECT, pois você estará vendo o que será deletado
+
+UPDATE:
+    UPDATE modifica registros existentes
+    ex:
+        UPDATE ATTENDEE SET EMAIL = UPPER(EMAIL)
+    coloca os valores do email em letra maiúscula
+
+    é possível atualizar mais de um registrp
+    ex:
+        UPDATE ATTENDEE SET FIRST_NAME = UPPER(FIRST_NAME),
+        LAST_NAME = UPPER(LAST_NAME)
+    atualiza dois campos ao mesmo tempo
+
+    é possível utilizar WHERE no UPDATE
+    ex:
+        UPDATE ATTENDE SET VIP = 1
+        WHERE ATTENDE_ID IN (3,4)
+    transforma em vip casa o id seja 3 ou 4
